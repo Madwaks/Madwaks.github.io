@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["4KQTZ37QAK.com.madwaks.fitnesscompanion"],
+        "components": [
+          { "/": "/fc/program-link", "comment": "Fit Companion: link the program app" },
+          { "/": "/fc/program-link/", "comment": "Fit Companion: link the program app" }
+        ]
+      }
+    ]
+  }
+}
