@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Fit Companion</title>
+  <style>
+    :root {
+      --background: #141110;
+      --surface: #1e1a17;
+      --text: #f5eee6;
+      --text-secondary: #a89c90;
+      --accent: #ff6b3d;
+      --accent-pressed: #e0592c;
+      --on-accent: #1a0f0a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--background);
+      color: var(--text);
+      font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    main {
+      width: 100%;
+      max-width: 420px;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    h1 { font-size: 24px; margin: 0 0 24px; }
+    .button {
+      display: block;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--accent);
+      color: var(--on-accent);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .button:active { background: var(--accent-pressed); }
+    p { color: var(--text-secondary); margin: 16px 0 0; }
+    [hidden] { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Fit Companion</h1>
+    <a id="open" class="button" href="fitnesscompanion://program-link" hidden></a>
+    <p id="help"></p>
+  </main>
+  <script>
+    (function () {
+      var en = !/^fr\b/i.test(navigator.language || "");
+      var text = en
+        ? { open: "Open Fit Companion", help: "App not installed? Ask for access to the beta.", invalid: "This link is incomplete. Open the link you received again." }
+        : { open: "Ouvrir Fit Companion", help: "App pas installée ? Demande l'accès à la bêta.", invalid: "Ce lien est incomplet. Rouvre le lien reçu." };
+      document.documentElement.lang = en ? "en" : "fr";
+
+      // The token comes in the fragment (never sent to the server), or in the query as a fallback.
+      var read = function (part) {
+        var match = /(?:^|[?#&])token=([A-Za-z0-9_-]{32,128})(?:&|$)/.exec(part);
+        return match ? match[1] : null;
+      };
+      var token = read(location.hash) || read(location.search);
+
+      var open = document.getElementById("open");
+      var help = document.getElementById("help");
+      if (token) {
+        open.href = "fitnesscompanion://program-link?token=" + token;
+        open.textContent = text.open;
+        open.hidden = false;
+        help.textContent = text.help;
+        // Keep the token out of the address bar and the history once read.
+        history.replaceState(null, "", location.pathname);
+      } else {
+        help.textContent = text.invalid;
+      }
+    })();
+  </script>
+</body>
+</html>
